@@ -203,7 +203,7 @@ make_req(Method, Path, LUser, LServer, Password) ->
     ContentType = {<<"Content-Type">>, <<"application/x-www-form-urlencoded">>},
     Connection = cuesport:get_worker(existing_pool_name(LServer)),
 
-    ?DEBUG("Making request '~s' for user ~s@~s...", [Path, LUser, LServer]),
+    %?DEBUG("Making request '~s' for user ~s@~s...", [Path, LUser, LServer]),
     {ok, {{Code, _Reason}, _RespHeaders, RespBody, _, _}} = case Method of
         get -> fusco:request(Connection, <<PathPrefix/binary, Path/binary, "?", Query/binary>>,
                              "GET", Header, "", 2, 5000);
@@ -211,7 +211,7 @@ make_req(Method, Path, LUser, LServer, Password) ->
                               "POST", [ContentType|Header], Query, 2, 5000)
     end,
 
-    ?DEBUG("Request result: ~s: ~p", [Code, RespBody]),
+    %?DEBUG("Request result: ~s: ~p", [Code, RespBody]),
     case Code of
         <<"409">> -> {error, conflict};
         <<"404">> -> {error, not_found};
